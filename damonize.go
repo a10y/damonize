@@ -15,14 +15,14 @@ func usage() {
 }
 
 func parseCmdLine(rawArgs []string, cmd *string, args *[]string) {
-	if len(rawArgs) == 1 {
+	if len(rawArgs) == 0 {
 		// print usage
 		fmt.Fprintf(os.Stderr, "error: not enough arguments\n")
 		flag.Usage()
 		os.Exit(1)
 	}
-	*cmd = os.Args[1]
-	*args = os.Args[1:]
+	*cmd = rawArgs[0]
+	*args = rawArgs
 }
 
 var (
