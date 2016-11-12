@@ -62,7 +62,6 @@ func main() {
 			os.Exit(0)
 		} else {
 			// Execute the daemon in the new session
-			// Have it inherit the environment from the current shell
 			if clearEnv {
 				syscall.Exec(cmd, args, []string{})
 			} else {
