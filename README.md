@@ -6,7 +6,7 @@ Installing
 ----------
 
 ```
-go get github.com/andreweduffy/damonize
+go get -u github.com/andreweduffy/damonize
 ```
 
 Usage
