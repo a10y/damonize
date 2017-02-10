@@ -40,6 +40,13 @@ func init() {
 }
 
 func main() {
+	// Ensure the binary specified can be found on the current PATH
+	qualified, err := exec.LookPath(cmd)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "damonize: %v not found on PATH\n", cmd)
+		os.Exit(1)
+	}
+
 	// Copied from exec_bsd.go in runtime package
 	darwin := runtime.GOOS == "darwin"
 	pid, ischild, _ := syscall.RawSyscall(syscall.SYS_FORK, 0, 0, 0)
@@ -51,12 +58,6 @@ func main() {
 		// parent, dies
 		os.Exit(0)
 	} else {
-		// Ensure the binary specified can be found on the current PATH
-		binaryQualified, err := exec.LookPath(cmd)
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "damonize: %v not found on PATH\n", cmd)
-			os.Exit(1)
-		}
 
 		// child, create new session and fork subprocess
 		syscall.Setsid()
@@ -71,9 +72,9 @@ func main() {
 		} else {
 			// Execute the daemon in the new session
 			if clearEnv {
-				syscall.Exec(binaryQualified, args, []string{})
+				syscall.Exec(qualified, args, []string{})
 			} else {
-				syscall.Exec(binaryQualified, args, os.Environ())
+				syscall.Exec(qualified, args, os.Environ())
 			}
 		}
 	}
